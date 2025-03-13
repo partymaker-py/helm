@@ -7,8 +7,8 @@ helm-build:
     - helm package .
     - ls -la
     - helm repo add --insecure-skip-tls-verify --username gitlab-ci-token --password ${CI_JOB_TOKEN} ${CI_PROJECT_NAME} ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/helm/stable
-    - helm plugin install https://github.com/chartmuseum/helm-push.git
-    - helm push podtatoserver-*.tgz ${CI_PROJECT_NAME}
+    # - helm plugin install https://github.com/chartmuseum/helm-push.git
+    - helm push cicdlab-chart-*.tgz ${CI_PROJECT_NAME}
   only:
     - main
   tags:
