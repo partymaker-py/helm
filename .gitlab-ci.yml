@@ -8,7 +8,7 @@ helm-build:
     # - ls -la
     # - helm repo add --insecure-skip-tls-verify --username gitlab-ci-token --password ${CI_JOB_TOKEN} ${CI_PROJECT_NAME} ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/helm/stable
     # - helm plugin install https://github.com/chartmuseum/helm-push.git
-    - 'curl --fail-with-body --request POST --user gitlab-ci-token:$CI_JOB_TOKEN --form "chart=@cicdlab-chart-0.1.0.tgz" "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/helm/api/stable/charts"'
+    - 'curl --fail-with-body --request POST --user gitlab-ci-token:$CI_JOB_TOKEN -k --form "chart=@cicdlab-chart-0.1.0.tgz" "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/helm/api/stable/charts"'
   only:
     - main
   tags:
