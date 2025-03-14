@@ -9,7 +9,8 @@ image:
   repository: registry.gitlab.cicdlab.local
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: {}
+  tag:
+    service: ipah/frontend:123
   env: {}
 
 imagePullSecrets: []
@@ -45,38 +46,38 @@ service:
   port: 80
 
 livenessProbe:
-  path: /health
+  # path: /health
 
 readinessProbe:
-  path: /health
+  # path: /health
+
+resources: {}
+  # limits:
+  #   cpu: 5500m
+  #   memory: 5Gi
+  # requests:
+  #   cpu: 4500m
+  #   memory: 2Gi
 
 ingress:
   enabled: true
-  arena: false
-  className: "nginx"
+  className: "nginx-external-ipah"
   annotations:
     nginx.ingress.kubernetes.io/proxy-body-size: 10m
   hosts:
-    - host: api.tarkov.help
+    - host: ipah.am
       paths:
         - path: /
           pathType: ImplementationSpecific
   tls:
-   - secretName: tarkov-secret-tls
+   - secretName: ipah-cloudflare-tls
      hosts:
-       - api.tarkov.help
+       - ipah.am
 
-resources:
-  limits:
-    cpu: 5500m
-    memory: 5Gi
-  requests:
-    cpu: 4500m
-    memory: 2Gi
 
 
 autoscaling:
-  enabled: true
+  enabled: false
   minReplicas: 1
   maxReplicas: 3
   targetCPUUtilizationPercentage: 60
