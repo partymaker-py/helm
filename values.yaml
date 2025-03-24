@@ -11,6 +11,7 @@ image:
   # Overrides the image tag whose default is the chart appVersion.
   tag:
     service: ipah/frontend:123
+    nginx: ipah/frontend:123-nginx
   env: {}
 
 imagePullSecrets: []
@@ -46,10 +47,10 @@ service:
   port: 80
 
 livenessProbe:
-  # path: /health
+  path: /healthz
 
 readinessProbe:
-  # path: /health
+  path: /healthz
 
 resources: {}
   # limits:

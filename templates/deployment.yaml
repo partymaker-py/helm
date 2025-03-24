@@ -8,7 +8,7 @@ metadata:
     {{- include "cicdlab-chart.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.replicaCount | default 1 }}
   {{- end }}
   selector:
     matchLabels:
@@ -36,7 +36,7 @@ spec:
         - name: {{ $fullName }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}/{{ .Values.image.tag.service | default .Chart.AppVersion }}"
+          image: "{{ .Values.image.repository | default "registry.gitlab.cicdlab.local" }}/{{ .Values.image.tag.service | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
@@ -50,25 +50,61 @@ spec:
           {{- end }}
           env:
           {{- with .Values.image.env }}
-            {{ toYaml . | nindent 12 }}
+            {{- toYaml . | nindent 12 }}
           {{- end }}
+          {{- if not .Values.image.tag.nginx }}
+          {{- if .Values.livenessProbe.path }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.livenessProbe.path }}
+              port: {{ .Values.service.port }}
+            failureThreshold: 3
+            periodSeconds: 10
+            timeoutSeconds: 2
+            successThreshold: 1
+          {{- end }}
+          {{- if .Values.readinessProbe.path }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.readinessProbe.path }}
+              port: {{ .Values.service.port | default 5000 }}
+            failureThreshold: 3
+            periodSeconds: 10
+            timeoutSeconds: 2
+            successThreshold: 1
+          {{- end }}
+          {{- end }}
+          terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds | default 30 }}
       {{- if .Values.image.tag.nginx }}
         - name: nginx-proxy
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}/{{ .Values.image.tag.nginx | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.livenessProbe.path }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.livenessProbe.path }}
+              port: {{ .Values.service.port }}
+            failureThreshold: 3
+            periodSeconds: 10
+            timeoutSeconds: 2
+            successThreshold: 1
+          {{- end }}
+          {{- if .Values.readinessProbe.path }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.readinessProbe.path }}
+              port: {{ .Values.service.port | default 80 }}
+            failureThreshold: 3
+            periodSeconds: 10
+            timeoutSeconds: 2
+            successThreshold: 1
+          {{- end }}
           ports:
             - name: http
-              containerPort: 80
+              containerPort: {{ .Values.service.port | default 80 }}
               protocol: TCP
-          resources:
-            limits:
-              cpu: 64m
-              memory: 256Mi
-            requests:
-              cpu: 32m
-              memory: 128Mi
       {{- end }}
       {{- with .Values.volumes }}
       volumes:
