@@ -36,11 +36,11 @@ service:
   type: ClusterIP
   port: 5000
 
-livenessProbe:
-  path: /healthz
+livenessProbe: {}
+  # path: /healthz
 
-readinessProbe:
-  path: /healthz
+readinessProbe: {}
+  # path: /healthz
 
 resources: {}
 
