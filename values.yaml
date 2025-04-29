@@ -64,16 +64,4 @@ tolerations: []
 affinity: {}
 
 ingress:
-  enabled: true
-  className: "nginx-external-dox"
-  annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt-dox"
-  hosts:
-    - host: wbhelper.test.doxpublisher.com
-      paths:
-        - path: /
-          pathType: ImplementationSpecific
-  tls:
-   - secretName: wbhelper-secret-tls
-     hosts:
-       - wbhelper.test.doxpublisher.com
+  enabled: false
