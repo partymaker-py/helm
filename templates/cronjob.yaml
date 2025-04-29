@@ -14,16 +14,16 @@ spec:
   {{- end }}
   jobTemplate:
     spec:
-      {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
       serviceAccountName: {{ include "cicdlab-chart.serviceAccountName" . }}
       template:
         metadata:
           labels:
             {{- include "cicdlab-chart.selectorLabels" . | nindent 10 }}
         spec:
+          {{- with .Values.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 8 }}
+          {{- end }}
           restartPolicy: {{ .Values.cronjob.restartPolicy | default "OnFailure" }}
           {{- with .Values.podSecurityContext }}
           securityContext:
