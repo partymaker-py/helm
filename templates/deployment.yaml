@@ -1,18 +1,18 @@
-{{- $fullName := include "cicdlab-chart.fullname" . -}}
+{{- $fullName := include "cloud-chart.fullname" . -}}
 {{- if eq $.Values.kind "Deployment" }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "cicdlab-chart.fullname" . }}
+  name: {{ include "cloud-chart.fullname" . }}
   labels:
-    {{- include "cicdlab-chart.labels" . | nindent 4 }}
+    {{- include "cloud-chart.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount | default 1 }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "cicdlab-chart.selectorLabels" . | nindent 6 }}
+      {{- include "cloud-chart.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -20,7 +20,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "cicdlab-chart.labels" . | nindent 8 }}
+        {{- include "cloud-chart.labels" . | nindent 8 }}
 	{{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -29,14 +29,14 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "cicdlab-chart.serviceAccountName" . }}
+      serviceAccountName: {{ include "cloud-chart.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ $fullName }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository | default "registry.gitlab.cicdlab.local" }}/{{ .Values.image.tag.service | default .Chart.AppVersion }}"
+          image: "{{ .Values.image.repository | default "registry.gitlab.cloud.local" }}/{{ .Values.image.tag.service | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http

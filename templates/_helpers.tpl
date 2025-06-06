@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "cicdlab-chart.name" -}}
+{{- define "cloud-chart.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -10,7 +10,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "cicdlab-chart.fullname" -}}
+{{- define "cloud-chart.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -26,16 +26,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "cicdlab-chart.chart" -}}
+{{- define "cloud-chart.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "cicdlab-chart.labels" -}}
-helm.sh/chart: {{ include "cicdlab-chart.chart" . }}
-{{ include "cicdlab-chart.selectorLabels" . }}
+{{- define "cloud-chart.labels" -}}
+helm.sh/chart: {{ include "cloud-chart.chart" . }}
+{{ include "cloud-chart.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -45,17 +45,17 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "cicdlab-chart.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "cicdlab-chart.name" . }}
+{{- define "cloud-chart.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "cloud-chart.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "cicdlab-chart.serviceAccountName" -}}
+{{- define "cloud-chart.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "cicdlab-chart.fullname" .) .Values.serviceAccount.name }}
+{{- default (include "cloud-chart.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}

@@ -2,14 +2,14 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "cicdlab-chart.fullname" . }}
+  name: {{ include "cloud-chart.fullname" . }}
   labels:
-    {{- include "cicdlab-chart.labels" . | nindent 4 }}
+    {{- include "cloud-chart.labels" . | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "cicdlab-chart.fullname" . }}
+    name: {{ include "cloud-chart.fullname" . }}
   minReplicas: {{ .Values.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.autoscaling.maxReplicas }}
   metrics:

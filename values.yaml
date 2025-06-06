@@ -2,7 +2,7 @@ kind: Deployment
 replicaCount: 1
 
 image:
-  repository: registry.gitlab.cicdlab.local
+  repository: registry.gitlab.cloud.local
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: {}

@@ -2,9 +2,9 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "cicdlab-chart.fullname" . }}
+  name: {{ include "cloud-chart.fullname" . }}
   labels:
-    {{- include "cicdlab-chart.labels" . | nindent 4 }}
+    {{- include "cloud-chart.labels" . | nindent 4 }}
   {{- with .Values.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
@@ -35,7 +35,7 @@ spec:
             {{- end }}
             backend:
               service:
-                name: {{ .backend | default (include "cicdlab-chart.fullname" $) }}
+                name: {{ .backend | default (include "cloud-chart.fullname" $) }}
                 port:
                   number: {{ .backendPort | default $.Values.service.port }}
           {{- end }}

@@ -1,11 +1,11 @@
 {{- if eq $.Values.kind "CronJob" -}}
-{{- $fullName := include "cicdlab-chart.fullname" . -}}
+{{- $fullName := include "cloud-chart.fullname" . -}}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: {{ $fullName }}
   labels:
-    {{- include "cicdlab-chart.labels" . | nindent 4 }}
+    {{- include "cloud-chart.labels" . | nindent 4 }}
 spec:
   schedule: "{{ .Values.cronjob.schedule }}"
   concurrencyPolicy: {{ .Values.cronjob.concurrencyPolicy | default "Forbid" }}
@@ -14,11 +14,11 @@ spec:
   {{- end }}
   jobTemplate:
     spec:
-      serviceAccountName: {{ include "cicdlab-chart.serviceAccountName" . }}
+      serviceAccountName: {{ include "cloud-chart.serviceAccountName" . }}
       template:
         metadata:
           labels:
-            {{- include "cicdlab-chart.selectorLabels" . | nindent 10 }}
+            {{- include "cloud-chart.selectorLabels" . | nindent 10 }}
         spec:
           {{- with .Values.imagePullSecrets }}
           imagePullSecrets:
@@ -51,7 +51,7 @@ spec:
               securityContext:
                 {{- toYaml . | nindent 16 }}
               {{- end }}
-              image: "{{ .Values.image.repository | default "registry.gitlab.cicdlab.local" }}/{{ .Values.image.tag.service | default .Chart.AppVersion }}"
+              image: "{{ .Values.image.repository | default "registry.gitlab.cloud.local" }}/{{ .Values.image.tag.service | default .Chart.AppVersion }}"
               imagePullPolicy: {{ .Values.image.pullPolicy }}
               ports:
                 - name: http
