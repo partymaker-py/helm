@@ -7,6 +7,3 @@ helm-build:
     - 'curl --fail-with-body --request POST --user gitlab-ci-token:$CI_JOB_TOKEN -k --form "chart=@cloud-chart-0.3.2.tgz" "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/helm/api/stable/charts"'
   only:
     - main
-  tags:
-    - shell
-    - shared
