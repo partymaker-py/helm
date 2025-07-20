@@ -1,6 +1,8 @@
 helm-build:
   # Use the official docker image.
-  image: alpine/helm:3.18
+  image: 
+    name: alpine/helm:3.18
+    entrypoint: [""]
   stage: build
   script:
     - helm template testing .
