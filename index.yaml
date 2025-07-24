@@ -3,7 +3,17 @@ entries:
   cloud-chart:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2025-07-24T12:41:21.2869849+07:00"
+    created: "2025-07-24T12:46:48.0767906+07:00"
+    description: A Helm chart for Kubernetes
+    digest: ac5667ae8e41a7e05044e14d180ff6dc28f023ae8551d61b5bf30fd874b7d1ad
+    name: cloud-chart
+    type: application
+    urls:
+    - https://partymaker-py.github.io/helm/cloud-chart-1.0.1.tgz
+    version: 1.0.1
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2025-07-24T12:46:48.0762727+07:00"
     description: A Helm chart for Kubernetes
     digest: d6b076e4f517d3b9fc095b8bde5d21042eb72d3a6d2996db6de7dfdd27e57e9b
     name: cloud-chart
@@ -11,4 +21,4 @@ entries:
     urls:
     - https://partymaker-py.github.io/helm/cloud-chart-1.0.0.tgz
     version: 1.0.0
-generated: "2025-07-24T12:41:21.2864595+07:00"
+generated: "2025-07-24T12:46:48.0756901+07:00"
