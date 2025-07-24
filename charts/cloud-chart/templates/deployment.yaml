@@ -38,10 +38,12 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository | default "registry.gitlab.cloud.local" }}/{{ .Values.image.tag.service | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if not .Values.image.tag.nginx }}
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
+          {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- with .Values.volumeMounts }}
