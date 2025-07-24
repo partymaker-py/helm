@@ -5,8 +5,7 @@ image:
   repository: registry.gitlab.cloud.local
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag:
-    nginx: 123
+  tag: {}
   env: {}
 
 imagePullSecrets: 
