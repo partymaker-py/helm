@@ -5,7 +5,8 @@ image:
   repository: registry.gitlab.cloud.local
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: {}
+  tag:
+    nginx: 123
   env: {}
 
 imagePullSecrets: 
@@ -31,6 +32,10 @@ podSecurityContext: {}
 
 securityContext: {}
 
+metrics:
+  enabled: false
+  port: 5000
+  endpoint: /metrics
 
 service:
   type: ClusterIP

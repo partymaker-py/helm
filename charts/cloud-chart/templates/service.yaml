@@ -5,13 +5,22 @@ metadata:
   name: {{ include "cloud-chart.fullname" . }}
   labels:
     {{- include "cloud-chart.labels" . | nindent 4 }}
+    {{- if and .Values.metrics .Values.metrics.enabled }}
+    vmscrape: "true" 
+    {{- end }}
 spec:
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port }}
-      targetPort: http
+      targetPort: {{- if .Values.image.tag.nginx }} nginx-http {{- else }} http {{- end }}
       protocol: TCP
       name: http
+      {{- if and .Values.metrics .Values.metrics.enabled (ne .Values.metrics.port .Values.service.port) }}
+    - port: {{ .Values.metrics.port }}
+      targetPort: {{ .Values.metrics.port }}
+      protocol: TCP
+      name: metrics
+      {{- end }}
   selector:
     {{- include "cloud-chart.selectorLabels" . | nindent 4 }}
 {{- end}}

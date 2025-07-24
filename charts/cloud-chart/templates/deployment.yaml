@@ -74,7 +74,6 @@ spec:
             successThreshold: 1
           {{- end }}
           {{- end }}
-          terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds | default 30 }}
       {{- if .Values.image.tag.nginx }}
         - name: nginx-proxy
           securityContext:
@@ -102,7 +101,7 @@ spec:
             successThreshold: 1
           {{- end }}
           ports:
-            - name: http
+            - name: nginx-http
               containerPort: {{ .Values.service.port | default 80 }}
               protocol: TCP
       {{- end }}

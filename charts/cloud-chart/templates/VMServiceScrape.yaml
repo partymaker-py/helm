@@ -1,0 +1,24 @@
+{{- if and .Values.metrics .Values.metrics.enabled -}}
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMServiceScrape
+metadata:
+  name: {{ include "cloud-chart.fullname" . }}
+  labels:
+    {{- include "cloud-chart.labels" . | nindent 4 }}
+  {{- with .Values.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  endpoints:
+    - path: {{ .Values.metrics.endpoint | default "/metrics" }}
+      port: {{- if and .Values.metrics .Values.metrics.enabled (ne .Values.metrics.port .Values.service.port) }} metrics {{- else }} http {{- end }}
+  namespaceSelector:
+    matchNames:
+      - test
+      - prod
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ .Release.Name }}
+      vmscrape: "true"
+{{- end }}
