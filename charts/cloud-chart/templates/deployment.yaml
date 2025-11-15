@@ -124,7 +124,7 @@ spec:
       {{- range $index, $pvc := .Values.persistence.volumes }}
         - name: {{ $pvc.name }}
           persistentVolumeClaim:
-            claimName: {{ include "cloud-chart.fullname" $ }}-{{ $pvc.name }}
+            claimName: {{ $pvc.existingClaim | default (printf "%s-%s" (include "cloud-chart.fullname" $) $pvc.name) }}
       {{- end }}
       {{- end }}
       {{- with .Values.volumes }}

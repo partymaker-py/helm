@@ -1,0 +1,22 @@
+{{- if .Values.persistence.enabled }}
+{{- range $index, $pvc := .Values.persistence.volumes }}
+{{- if not $pvc.existingClaim }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "cloud-chart.fullname" $ }}-{{ $pvc.name }}
+  labels:
+    {{- include "cloud-chart.labels" $ | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ $pvc.size | default "10Gi" }}
+  {{- if or $pvc.storageClass $.Values.persistence.storageClass }}
+  storageClassName: {{ $pvc.storageClass | default $.Values.persistence.storageClass }}
+  {{- end }}
+{{- end }}
+{{- end }}
+{{- end }}

@@ -30,6 +30,7 @@ podSecurityContext: {}
 
 persistence:
   enabled: false
+  storageClass: ""
   volumes: 
     - name: data
       mountPath: /data
