@@ -28,6 +28,14 @@ podLabels: {}
 
 podSecurityContext: {}
 
+persistence:
+  enabled: false
+  volumes: 
+    - name: data
+      mountPath: /data
+      subPath: ""
+      readOnly: false
+  existingClaim: ""
 
 securityContext: {}
 

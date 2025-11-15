@@ -21,7 +21,7 @@ spec:
       {{- end }}
       labels:
         {{- include "cloud-chart.labels" . | nindent 8 }}
-	{{- with .Values.podLabels }}
+    {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
@@ -46,8 +46,20 @@ spec:
           {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-          {{- with .Values.volumeMounts }}
           volumeMounts:
+          {{- if .Values.persistence.enabled }}
+          {{- range $index, $pvc := .Values.persistence.volumes }}
+            - name: {{ $pvc.name }}
+              mountPath: {{ $pvc.mountPath }}
+              {{- if $pvc.subPath }}
+              subPath: {{ $pvc.subPath }}
+              {{- end }}
+              {{- if $pvc.readOnly }}
+              readOnly: {{ $pvc.readOnly }}
+              {{- end }}
+          {{- end }}
+          {{- end }}
+          {{- with .Values.volumeMounts }}
             {{- toYaml . | nindent 12 }}
           {{- end }}
           env:
@@ -107,8 +119,15 @@ spec:
               containerPort: {{ .Values.service.port | default 80 }}
               protocol: TCP
       {{- end }}
-      {{- with .Values.volumes }}
       volumes:
+      {{- if .Values.persistence.enabled }}
+      {{- range $index, $pvc := .Values.persistence.volumes }}
+        - name: {{ $pvc.name }}
+          persistentVolumeClaim:
+            claimName: {{ include "cloud-chart.fullname" $ }}-{{ $pvc.name }}
+      {{- end }}
+      {{- end }}
+      {{- with .Values.volumes }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.nodeSelector }}
